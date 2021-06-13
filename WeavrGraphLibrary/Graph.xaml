@@ -1,0 +1,120 @@
+<UserControl x:Class="WeavrGraphLibrary.Graph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WeavrGraphLibrary"
+             FontFamily="Roboto"
+             UseLayoutRounding="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             MinHeight="200" MinWidth="200">
+    <UserControl.Resources>
+        <!--Colors-->
+        <SolidColorBrush x:Key="AxisLabelText"               Color="#bebebe"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background"  Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground"  Color="#FF838383"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#424242"/>
+        <SolidColorBrush x:Key="Button.Normal.Foreground"    Color="#F4F4F4"/>
+        <SolidColorBrush x:Key="Button.Normal.Background"    Color="#323438"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background"   Color="#303030"/>
+        <SolidColorBrush x:Key="DebugLine"                   Color="#FF00F5"/>
+        <SolidColorBrush x:Key="GraphBackground"             Color="#171718"/>
+
+        <Style x:Key="AxisLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource AxisLabelText}"/>
+        </Style>
+
+        <Style x:Key="DebugBorder" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource DebugLine}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="GraphContainer" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="{StaticResource GraphBackground}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+        </Style>
+
+        <Style x:Key="GreyButton" TargetType="Button">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="TextBlock.FontSize" Value="20"/>
+            <Setter Property="TextBlock.Foreground" Value="{StaticResource Button.Normal.Foreground}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Normal.Background}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ButtonBase}">
+                        <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource GraphContainer}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            
+            <!--Toolbar-->
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#26282c" CornerRadius="20 20 0 0"></Border>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Name="TitleLabel" Foreground="#ebebeb" FontSize="33" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <TextBlock FontStretch="ExtraExpanded" Text="Title"/>
+            </Label>
+            <Button Style="{DynamicResource GreyButton}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Right" Margin="20 0 20 0" ToolTip="Click to know more">
+                <Image Source="Icons/Info.png" Width="15" />
+            </Button>
+            <Button Style="{DynamicResource GreyButton}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Right" Margin="80 0 80 0" ToolTip="Save this graph as an image">
+                <Image Source="Icons/Share.png" Width="15" />
+            </Button>
+            
+            <!--Y axis label-->
+            <!--Margin="20,0,20,0"-->
+            <Label Grid.Row="1" Grid.Column="0" Name="YAxisLabel" Style="{StaticResource AxisLabel}">
+                <TextBlock Text="Y Axis Label">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="-90"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Label>
+            
+            <!--Canvas-->
+            <Border Grid.Row="1" Grid.Column="1" Margin="0 20 20 0">
+                <local:GraphCanvas x:Name="MainCanvas" />
+            </Border>
+            
+            <!--X axis label-->
+            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource AxisLabel}" Height="28" Content="X Axis Label"/>
+        </Grid>
+    </Border>
+</UserControl>
